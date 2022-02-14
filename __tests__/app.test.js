@@ -27,20 +27,20 @@ describe("app", () => {
           });
         });
     });
-    test("status 200:, responds with the length of the array", () => {
-      return request(app)
-        .get("/api/topics")
-        .expect(200)
-        .then(({ body: { topics } }) => {
-          expect(topics).toHaveLength(3);
-        });
-    });
     test("Status: 404, responds with a not found message when the incorrect path is provided", () => {
       return request(app)
         .get("/api/not-a-route")
         .expect(404)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Not found");
+        });
+    });
+    test("status 200:, responds with the length of returning the array", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then(({ body: { topics } }) => {
+          expect(topics).toHaveLength(3);
         });
     });
   });
