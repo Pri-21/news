@@ -27,6 +27,14 @@ describe("app", () => {
           });
         });
     });
+    test("status 200:, responds with the length of the array", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then(({ body: { topics } }) => {
+          expect(topics).toHaveLength(3);
+        });
+    });
     test("Status: 404, responds with a not found message when the incorrect path is provided", () => {
       return request(app)
         .get("/api/not-a-route")
@@ -36,4 +44,26 @@ describe("app", () => {
         });
     });
   });
+  //   describe("GET /api/articles", () => {
+  //     test("Status: 200, repsonds with an article object containing all the required properties", () => {
+  //       return request(app)
+  //         .get("/api/articles/:article:id")
+  //         .expect(200)
+  //         .then(({ body: { articles } }) => {
+  //           articles.forEach((article) => {
+  //             expect(article).toEqual(
+  //               expect.objectContaining({
+  //                 author: expect.any(String),
+  //                 title: expect.any(String),
+  //                 article_id: expect.any(Number),
+  //                 body: expect.any(String),
+  //                 topic: expect.any(String),
+  //                 created_at: expect.any(String),
+  //                 votes: expect.any(Number),
+  //               })
+  //             );
+  //           });
+  //         });
+  //     });
+  //   });
 });
