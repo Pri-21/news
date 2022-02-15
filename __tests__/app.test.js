@@ -44,26 +44,38 @@ describe("app", () => {
         });
     });
   });
-  //   describe("GET /api/articles", () => {
-  //     test("Status: 200, repsonds with an article object containing all the required properties", () => {
-  //       return request(app)
-  //         .get("/api/articles/:article:id")
-  //         .expect(200)
-  //         .then(({ body: { articles } }) => {
-  //           articles.forEach((article) => {
-  //             expect(article).toEqual(
-  //               expect.objectContaining({
-  //                 author: expect.any(String),
-  //                 title: expect.any(String),
-  //                 article_id: expect.any(Number),
-  //                 body: expect.any(String),
-  //                 topic: expect.any(String),
-  //                 created_at: expect.any(String),
-  //                 votes: expect.any(Number),
-  //               })
-  //             );
-  //           });
-  //         });
-  //     });
-  //   });
+  describe("GET /api/articles", () => {
+    test("Status: 200, repsonds with an article object containing all the required properties", () => {
+      return request(app)
+        .get("/api/articles/6")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toEqual({
+            article_id: 6,
+            title: "A",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "Delicious tin of cat food",
+            created_at: "2020-10-18T01:00:00.000Z",
+            votes: 0,
+          });
+        });
+    });
+    test("Status: 404, valid but non-existent id", () => {
+      return request(app)
+        .get("/api/articles/999")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Article id does not exist");
+        });
+    });
+    test("Status: 400, invalid id", () => {
+      return request(app)
+        .get("/api/articles/notAnId")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad request");
+        });
+    });
+  });
 });
