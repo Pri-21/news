@@ -44,8 +44,8 @@ describe("app", () => {
         });
     });
   });
-  describe("GET /api/articles", () => {
-    test("Status: 200, repsonds with an article object containing all the required properties", () => {
+  describe("GET /api/articles/:article_id", () => {
+    test("Status: 200, responds with an article object containing all the required properties", () => {
       return request(app)
         .get("/api/articles/6")
         .expect(200)
@@ -75,6 +75,64 @@ describe("app", () => {
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Bad request");
+        });
+    });
+  });
+  describe("PATCH /api/articles", () => {
+    test("Status: 200, responds with the updated article", () => {
+      const updatedVotes = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/articles/6")
+        .send(updatedVotes)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toEqual({
+            article_id: 6,
+            title: "A",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "Delicious tin of cat food",
+            created_at: "2020-10-18T01:00:00.000Z",
+            votes: 2,
+          });
+        });
+    });
+    test("Status: 200, responds with the updated article votes when the votes are more than 0", () => {
+      const updatedVotes = { inc_votes: 3 };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(updatedVotes)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 103,
+          });
+        });
+    });
+    test("Status: 400, responds with missing required fields message", () => {
+      const updatedVotes = {};
+      return request(app)
+        .patch("/api/articles/2")
+        .send(updatedVotes)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Missing required field");
+        });
+    });
+    test("Status: 400, responds with incorrect data type message", () => {
+      const updatedVotes = { inc_votes: "add" };
+      return request(app)
+        .patch("/api/articles/3")
+        .send(updatedVotes)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Incorrect data type");
         });
     });
   });
