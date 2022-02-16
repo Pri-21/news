@@ -24,7 +24,6 @@ exports.checkArticleExists = (Id) => {
 exports.updateArticleVotes = (Id, updatedVotes) => {
   const { inc_votes: newVote } = updatedVotes;
   if (typeof newVote === "string") {
-    console.log("hello");
     return Promise.reject({
       status: 400,
       msg: "Incorrect data type",
