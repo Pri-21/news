@@ -95,5 +95,13 @@ describe("app", () => {
           });
         });
     });
+    test("Status: 200, responds with the length of users array", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toHaveLength(4);
+        });
+    });
   });
 });
