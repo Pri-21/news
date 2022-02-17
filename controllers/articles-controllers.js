@@ -2,7 +2,7 @@ const {
   fetchArticleById,
   checkArticleExists,
   updateArticleVotes,
-  checkArticleVotesDataType,
+  fetchArticles,
 } = require("../models/articles-models");
 
 exports.getArticleById = (req, res, next) => {
@@ -19,6 +19,14 @@ exports.patchArticleVotes = (req, res, next) => {
   updateArticleVotes(article_id, req.body)
     .then((article) => {
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.getArticles = (req, res, next) => {
+  fetchArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
     })
     .catch(next);
 };
