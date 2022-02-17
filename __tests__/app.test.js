@@ -3,6 +3,7 @@ const app = require("../app");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const db = require("../db/connection");
+const jestSorted = require("jest-sorted");
 
 afterAll(() => {
   db.end();
@@ -160,6 +161,43 @@ describe("app", () => {
             expect(users).toHaveLength(4);
           });
       });
+    });
+  });
+  describe("GET /api/articles", () => {
+    test("Status: 200, responds with an array of article objects", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                author: expect.any(String),
+                title: expect.any(String),
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+              })
+            );
+          });
+        });
+    });
+    test("Status: 200, responds with the length of the returning array", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(12);
+        });
+    });
+    test("Status: 200, the articles are sorted in date by descending order", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("created_at", { descending: true });
+        });
     });
   });
 }); //re-comitting because of merge confilcts
