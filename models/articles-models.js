@@ -42,10 +42,9 @@ exports.updateArticleVotes = (Id, updatedVotes) => {
 exports.fetchArticles = () => {
   return db
     .query(
-      "SELECT author, title, article_id, topic, created_at, votes FROM articles"
+      "SELECT author, title, article_id, topic, created_at, votes FROM articles ORDER BY created_at DESC;"
     )
     .then((result) => {
-      console.log(result.rows);
       return result.rows;
     });
 };

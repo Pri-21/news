@@ -3,6 +3,7 @@ const app = require("../app");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const db = require("../db/connection");
+const jestSorted = require("jest-sorted");
 
 afterAll(() => {
   db.end();
@@ -154,6 +155,22 @@ describe("app", () => {
               })
             );
           });
+        });
+    });
+    test("Status: 200, responds with the length of the returning array", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(12);
+        });
+    });
+    test("Status: 200, the articles are sorted in date by descending order", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("created_at", { descending: true });
         });
     });
   });
