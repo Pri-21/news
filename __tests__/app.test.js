@@ -136,6 +136,32 @@ describe("app", () => {
           expect(msg).toBe("Incorrect data type");
         });
     });
+    describe("GET /api/users", () => {
+      test("Status: 200, responds with an array of objects, which include the username property", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body: { users } }) => {
+            users.forEach((user) => {
+              expect(user).toEqual(
+                expect.objectContaining({
+                  username: expect.any(String),
+                  name: expect.any(String),
+                  avatar_url: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+      test("Status: 200, responds with the length of users array", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body: { users } }) => {
+            expect(users).toHaveLength(4);
+          });
+      });
+    });
   });
   describe("GET /api/articles", () => {
     test("Status: 200, responds with an array of article objects", () => {
@@ -174,4 +200,4 @@ describe("app", () => {
         });
     });
   });
-});
+}); //re-comitting because of merge confilcts
