@@ -3,7 +3,7 @@ const db = require("../db/connection");
 exports.fetchArticleById = (Id) => {
   return db
     .query(
-      "SELECT articles.*, COUNT(comment_id)::int AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
+      "SELECT articles.*, COUNT(comment_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
       [Id]
     )
     .then((result) => {

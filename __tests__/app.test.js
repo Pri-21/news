@@ -71,7 +71,7 @@ describe("app", () => {
           expect(msg).toBe("Article id does not exist");
         });
     });
-    test("Status: 400, invalid id", () => {
+    test("Status: 400, not an id", () => {
       return request(app)
         .get("/api/articles/notAnId")
         .expect(400)
@@ -215,6 +215,47 @@ describe("app", () => {
         .expect(200)
         .then(({ body: { articles } }) => {
           expect(articles).toBeSortedBy("created_at", { descending: true });
+        });
+    });
+  });
+  describe("GET /api/articles/:article_id/comments", () => {
+    test("Status 200: responds with an array of comments for the given article id", () => {
+      return request(app)
+        .get("/api/articles/3/comments")
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          expect(comments).toEqual([
+            {
+              body: "git push origin master",
+              votes: 0,
+              author: "icellusedkars",
+              comment_id: 10,
+              created_at: "2020-06-20T07:24:00.000Z",
+            },
+            {
+              body: "Ambidextrous marsupial",
+              votes: 0,
+              author: "icellusedkars",
+              comment_id: 11,
+              created_at: "2020-09-19T23:10:00.000Z",
+            },
+          ]);
+        });
+    });
+    test("Status 200: responds with a no comments message for an article that has no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("No comments for the article");
+        });
+    });
+    test("status: 404, valid but non-existant id", () => {
+      return request(app)
+        .get("/api/articles/999/comments")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Article does not exist");
         });
     });
   });
