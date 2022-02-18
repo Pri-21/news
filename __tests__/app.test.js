@@ -182,7 +182,7 @@ describe("app", () => {
     });
   });
   describe("GET /api/articles", () => {
-    test("Status: 200, responds with an array of article objects", () => {
+    test("Status: 200, responds with an array of article objects incuding the comment count property", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -196,6 +196,7 @@ describe("app", () => {
                 topic: expect.any(String),
                 created_at: expect.any(String),
                 votes: expect.any(Number),
+                comment_count: expect.any(Number),
               })
             );
           });
