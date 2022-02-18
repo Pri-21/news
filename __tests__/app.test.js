@@ -181,7 +181,7 @@ describe("app", () => {
       });
     });
   });
-  describe("GET /api/articles", () => { 
+  describe("GET /api/articles", () => {
     test("Status: 200, responds with an array of article objects incuding the comment count property", () => {
       return request(app)
         .get("/api/articles")
@@ -219,60 +219,29 @@ describe("app", () => {
         });
     });
   });
-  describe("GET /api/articles/:article_id/comments", () => {
-    test("Status 200: responds with an array of comments for the given article id", () => {
-      return request(app)
-        .get("/api/articles/3/comments")
-        .expect(200)
-        .then(({ body: { comments } }) => {
-          expect(comments).toEqual([
-            {
-              body: "git push origin master",
-              votes: 0,
-              author: "icellusedkars",
-              comment_id: 10,
-              created_at: "2020-06-20T07:24:00.000Z",
-            },
-            {
-              body: "Ambidextrous marsupial",
-              votes: 0,
-              author: "icellusedkars",
-              comment_id: 11,
-              created_at: "2020-09-19T23:10:00.000Z",
-            },
-          ]);
-        });
-    });
-    test("Status 200: responds with an array of comments for the given article id", () => {
-      return request(app)
-        .get("/api/articles/9/comments")
-        .expect(200)
-        .then(({ body: { comments } }) => {
-          expect(comments).toEqual([
-            {
-              body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-              votes: 16,
-              author: "butter_bridge",
-              comment_id: 1,
-              created_at: "2020-04-06T12:17:00.000Z",
-            },
-            {
-              body: "The owls are not what they seem.",
-              votes: 20,
-              author: "icellusedkars",
-              comment_id: 17,
-              created_at: "2020-03-14T17:02:00.000Z",
-            },
-          ]);
-        });
-    });
-    // test("Status 200: responds with a no comments message for an article that has no comments", () => {
-    //   return request(app)
-    //     .get("/api/articles/2/comments")
-    //     .expect(200)
-    //     .then(({ body: { msg } }) => {
-    //       expect(msg).toEqual({ msg: "No comments for the article" });
-    //     });
-    // });
-  });
+  // describe("GET /api/articles/:article_id/comments", () => {
+  //   test("Status 200: responds with an array of comments for the given article id", () => {
+  //     return request(app)
+  //       .get("/api/articles/3/comments")
+  //       .expect(200)
+  //       .then(({ body: { comments } }) => {
+  //         expect(comments).toEqual([
+  //           {
+  //             body: "git push origin master",
+  //             votes: 0,
+  //             author: "icellusedkars",
+  //             comment_id: 10,
+  //             created_at: "2020-06-20T07:24:00.000Z",
+  //           },
+  //           {
+  //             body: "Ambidextrous marsupial",
+  //             votes: 0,
+  //             author: "icellusedkars",
+  //             comment_id: 11,
+  //             created_at: "2020-09-19T23:10:00.000Z",
+  //           },
+  //         ]);
+  //       });
+  //   });
+  // });
 });
