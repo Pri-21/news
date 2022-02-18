@@ -260,4 +260,33 @@ describe("app", () => {
         });
     });
   });
+  describe("POST /api/articles/:article_id/comments", () => {
+    test("Status: 201, responds with the posted comment for the selected article", () => {
+      const postedComment = { username: "butter_bridge", body: "comment1" };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(postedComment)
+        .expect(201)
+        .then(({ body: { comments } }) => {
+          expect(comments).toEqual({
+            comment_id: 19,
+            article_id: 2,
+            author: "butter_bridge",
+            body: "comment1",
+            votes: 0,
+            created_at: expect.any(String),
+          });
+        });
+    });
+    test("Status: 400, responds with missing required fields message", () => {
+      const postedComment = {};
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(postedComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Missing required field");
+        });
+    });
+  });
 });
