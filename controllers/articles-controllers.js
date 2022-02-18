@@ -24,9 +24,13 @@ exports.patchArticleVotes = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles()
+  const { sort_by, order, topic } = req.query;
+
+  fetchArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+    });
 };

@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const db = require("../db/connection");
 const jestSorted = require("jest-sorted");
+const { idle_in_transaction_session_timeout } = require("pg/lib/defaults");
 
 afterAll(() => {
   db.end();
@@ -286,6 +287,33 @@ describe("app", () => {
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Missing required field");
+        });
+    });
+  });
+  describe("GET /api/articles/?queries", () => {
+    test("Status:200, client can sort by votes", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("votes", { descending: true });
+        });
+    });
+    test("Status: 200, client can order by asc", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes&&order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("votes", { ascending: true });
+        });
+    });
+    test("Status: 200, client can filter articles by topic", () => {
+      return request(app)
+        .get("/api/articles?sort_by=topic&&topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          
+          expect(articles).toBeSortedBy("topic", { descending: true });
         });
     });
   });
