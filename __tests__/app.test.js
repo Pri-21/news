@@ -71,7 +71,7 @@ describe("app", () => {
           expect(msg).toBe("Article id does not exist");
         });
     });
-    test("Status: 400, invalid id", () => {
+    test("Status: 400, not an id", () => {
       return request(app)
         .get("/api/articles/notAnId")
         .expect(400)
@@ -242,36 +242,21 @@ describe("app", () => {
           ]);
         });
     });
-    test("Status 200: responds with an array of comments for the given article id", () => {
+    test("Status 200: responds with a no comments message for an article that has no comments", () => {
       return request(app)
-        .get("/api/articles/9/comments")
+        .get("/api/articles/2/comments")
         .expect(200)
-        .then(({ body: { comments } }) => {
-          expect(comments).toEqual([
-            {
-              body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-              votes: 16,
-              author: "butter_bridge",
-              comment_id: 1,
-              created_at: "2020-04-06T12:17:00.000Z",
-            },
-            {
-              body: "The owls are not what they seem.",
-              votes: 20,
-              author: "icellusedkars",
-              comment_id: 17,
-              created_at: "2020-03-14T17:02:00.000Z",
-            },
-          ]);
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("No comments for the article");
         });
     });
-    // test("Status 200: responds with a no comments message for an article that has no comments", () => {
-    //   return request(app)
-    //     .get("/api/articles/2/comments")
-    //     .expect(200)
-    //     .then(({ body: { msg } }) => {
-    //       expect(msg).toEqual({ msg: "No comments for the article" });
-    //     });
-    // });
+    test("status: 404, valid but non-existant id", () => {
+      return request(app)
+        .get("/api/articles/999/comments")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Article does not exist");
+        });
+    });
   });
 });
