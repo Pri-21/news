@@ -309,11 +309,18 @@ describe("app", () => {
     });
     test("Status: 200, client can filter articles by topic", () => {
       return request(app)
-        .get("/api/articles?sort_by=topic&&topic=mitch")
+        .get("/api/articles?topic=mitch")
         .expect(200)
         .then(({ body: { articles } }) => {
-          
           expect(articles).toBeSortedBy("topic", { descending: true });
+        });
+    });
+    test("Status: 404, responds with Topic does not exist", () => {
+      return request(app)
+        .get("/api/articles?topic=not-a-topic")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Topic does not exist");
         });
     });
   });
