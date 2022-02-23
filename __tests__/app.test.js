@@ -324,4 +324,17 @@ describe("app", () => {
         });
     });
   });
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("Status: 204, delete the given comment by comment id", () => {
+      return request(app).delete("/api/comments/2").expect(204);
+    });
+    test("Status: 404, valid but non-existant id", () => {
+      return request(app)
+        .delete("/api/comments/999")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Comment does not exist");
+        });
+    });
+  });
 });
