@@ -125,12 +125,9 @@
   },
   "GET /api/articles/?queries": {
     "description": "serves the articles filtered by the queries",
-    "queries": ["votes", "order", "topic"],
-    "exampleResponse": {}
+    "queries": ["votes", "order", "topic"]
   },
   "DELETE /api/comments/:comment_id": {
-    "description": "deletes a comment by comment id",
-    "queries": [],
-    "exampleResponse": {}
+    "description": "deletes a comment by comment id"
   }
 }
