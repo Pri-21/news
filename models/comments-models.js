@@ -1,4 +1,6 @@
+const { rows } = require("pg/lib/defaults");
 const db = require("../db/connection");
+const comments = require("../db/data/test-data/comments");
 
 exports.fetchCommentsByArticleId = (Id) => {
   const query1 = db.query(
@@ -32,5 +34,19 @@ exports.insertCommentByArticleId = (postedComment, Id) => {
     )
     .then((result) => {
       return result.rows[0];
+    });
+};
+
+exports.removeCommentByCommentId = (Id) => {
+  return db.query("DELETE FROM comments WHERE comment_id = $1", [Id]);
+};
+
+exports.checkCommentIdExists = (Id) => {
+  return db
+    .query("SELECT * FROM comments WHERE comment_id = $1", [Id])
+    .then((comments) => {
+      if (comments.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Comment does not exist" });
+      }
     });
 };
