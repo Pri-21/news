@@ -11,9 +11,11 @@ const {
   postCommentByArticleId,
 } = require("./controllers/comments-controllers");
 const { getUsers } = require("./controllers/users-controllers");
+const { getEndpoints } = require("./controllers/endpoints-controllers");
 
 app.use(express.json());
 
+app.get("/api", getEndpoints);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);

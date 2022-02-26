@@ -154,31 +154,31 @@ describe("app", () => {
           expect(msg).toBe("Incorrect data type");
         });
     });
-    describe("GET /api/users", () => {
-      test("Status: 200, responds with an array of objects, which include the username property", () => {
-        return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({ body: { users } }) => {
-            users.forEach((user) => {
-              expect(user).toEqual(
-                expect.objectContaining({
-                  username: expect.any(String),
-                  name: expect.any(String),
-                  avatar_url: expect.any(String),
-                })
-              );
-            });
+  });
+  describe("GET /api/users", () => {
+    test("Status: 200, responds with an array of objects, which include the username property", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String),
+              })
+            );
           });
-      });
-      test("Status: 200, responds with the length of users array", () => {
-        return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({ body: { users } }) => {
-            expect(users).toHaveLength(4);
-          });
-      });
+        });
+    });
+    test("Status: 200, responds with the length of users array", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toHaveLength(4);
+        });
     });
   });
   describe("GET /api/articles", () => {
@@ -286,6 +286,18 @@ describe("app", () => {
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Missing required field");
+        });
+    });
+  });
+  describe("GET /api", () => {
+    test("Status: 200, responds with a JSON object describing all the available endpoints on api", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual(
+            expect.objectContaining({ endpoints: expect.any(Object) })
+          );
         });
     });
   });
