@@ -38,7 +38,6 @@ app.use((err, req, res, next) => {
   } else if (err.code === "23502") {
     res.status(400).send({ msg: "Missing required field" });
   } else {
-    console.log(err);
     res.status(500).send({ msg: "Internal Server Error" });
   }
 });
