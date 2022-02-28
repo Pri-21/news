@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const db = require("../db/connection");
 const jestSorted = require("jest-sorted");
+const { idle_in_transaction_session_timeout } = require("pg/lib/defaults");
 
 afterAll(() => {
   db.end();
@@ -154,31 +155,31 @@ describe("app", () => {
           expect(msg).toBe("Incorrect data type");
         });
     });
-    describe("GET /api/users", () => {
-      test("Status: 200, responds with an array of objects, which include the username property", () => {
-        return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({ body: { users } }) => {
-            users.forEach((user) => {
-              expect(user).toEqual(
-                expect.objectContaining({
-                  username: expect.any(String),
-                  name: expect.any(String),
-                  avatar_url: expect.any(String),
-                })
-              );
-            });
+  });
+  describe("GET /api/users", () => {
+    test("Status: 200, responds with an array of objects, which include the username property", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String),
+              })
+            );
           });
-      });
-      test("Status: 200, responds with the length of users array", () => {
-        return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({ body: { users } }) => {
-            expect(users).toHaveLength(4);
-          });
-      });
+        });
+    });
+    test("Status: 200, responds with the length of users array", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toHaveLength(4);
+        });
     });
   });
   describe("GET /api/articles", () => {
@@ -286,6 +287,65 @@ describe("app", () => {
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Missing required field");
+        });
+    });
+  });
+  describe("GET /api/articles/?queries", () => {
+    test("Status:200, client can sort by votes", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("votes", { descending: true });
+        });
+    });
+    test("Status: 200, client can order by asc", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes&&order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("votes", { ascending: true });
+        });
+    });
+    test("Status: 200, client can filter articles by topic", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("topic", { descending: true });
+        });
+    });
+    test("Status: 404, responds with Topic does not exist", () => {
+      return request(app)
+        .get("/api/articles?topic=not-a-topic")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Topic does not exist");
+        });
+    });
+  });
+  describe("GET /api", () => {
+    test("Status: 200, responds with a JSON object describing all the available endpoints on api", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual(
+            expect.objectContaining({ endpoints: expect.any(Object) })
+          );
+        });
+    });
+  });
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("Status: 204, delete the given comment by comment id", () => {
+      return request(app).delete("/api/comments/2").expect(204);
+    });
+    test("Status: 404, valid but non-existant id", () => {
+      return request(app)
+        .delete("/api/comments/999")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Comment does not exist");
         });
     });
   });
