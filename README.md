@@ -1,49 +1,105 @@
 # News
 
-Link to the hosted version of the app
-https://pri-news-nc-app.herokuapp.com/api
+**This project contains the building blocks of a REST API and is meant to be a clone of a real world back-end service such as reddit.**
 
-Clone the project with this URL
-https://github.com/Pri-21/news.git
+### Hosted version of the app-
 
-Install node - minimum version 17
-Install PostgresSql - minimum version 8
+[News App](https://pri-news-nc-app.herokuapp.com/api "News App")
 
-Dependencies to install
-dotenv 16
-express 4.17.3
-pg 8.7.3
-pg-format 1.0.4
+---
 
-Dev dependencies to install
-jest 27.5.1
-jest extended 2
-jest sorted 1
-supertest 6.2.2
-husky 7
+### Clone the project with this URL
 
-To connect to the two databases after cloning the repo,
+[News.git](https://github.com/Pri-21/news.git "News.git")
 
-Add the following files:
-.env.test
-.env.development
+### Install
 
-Contents of both files:
+- [Node](https://nodejs.org/en/download/current/ "Node") - minimum version 17
+
+##
+
+- [PostgresSql](https://www.postgresql.org/download/ "PostgresSql") - minimum version 8
+
+##
+
+- [Node PG-format](https://www.npmjs.com/package/pg-format "PG-format") - minimum version 1
+
+##
+
+- [dotenv](https://www.npmjs.com/package/dotenv "dotenv") - minimum version 16
+
+##
+
+- [Express](https://www.npmjs.com/package/express "Express") - minimum version 4.17
+
+##
+
+- [Jest](https://jestjs.io/docs/getting-started "Jest") - minimum version 27.5
+
+##
+
+- [Jest extended](https://www.npmjs.com/package/jest-extended "Jest extended") - minimum version 2
+
+##
+
+- [Jest sorted](https://www.npmjs.com/package/jest-sorted "Jest sorted") - minimum version 1
+
+##
+
+- [SuperTest](https://www.npmjs.com/package/supertest "SuperTest") - minimum version 6.2
+
+##
+
+- [Husky](https://www.npmjs.com/package/husky "Husky") - minimum version 7
+
+---
+
+### To connect to the two databases after cloning the repo
+
+_Add the following files:_
+
+##
+
+- .env.test
+
+##
+
+- .env.development
+
+_Contents of both files:_
 
 In the .env.test file include-
-PGDATABASE=nc_news_test
+
+- PGDATABASE=nc_news_test
 
 In the .env.development file include-
-PGDATABASE=nc_news
+
+- PGDATABASE=nc_news
+
+**Note**
+
+##
 
 Some WSL users may have to start up their PG sever with the command below
-sudo service postgresql start
 
-To set up and seed the local database, run the following commands
+```bash
+sudo service postgresql start
+```
+
+### To set up and seed the local database
+
+Run the following commands
+
+```bash
 npm run setup-dbs
 npm run seed
 npm start
+```
 
-The test file is set up to seed the database every time it is run
+## To run tests
+
+```bash
 npm test
-npm test app.test to specifically run tests using the jest framework
+```
+
+The test file is set up to seed the database every time it is run. App and Utils tests are located in the tests folder.
