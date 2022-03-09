@@ -123,7 +123,7 @@
       "created_at": "2020-06-20T07:24:00.000Z"
     }
   },
-  "GET /api/articles/?queries": {
+  "GET /api/articles?queries": {
     "description": "serves the articles filtered by the queries",
     "queries": ["votes", "order", "topic"]
   },
